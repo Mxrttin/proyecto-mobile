@@ -1,8 +1,8 @@
 export class Producto {
 
-    idProducto!: number;
-    nombrePorducto!: string;
-    descripcionProducto!: string;
+    id_producto!: number;
+    nombre!: string;
+    descripcion!: string;
     categoria!:number;
     foto!:string;
     precio!:number;

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { ServicedbService } from 'src/app/services/servicedb.service';
 
 @Component({
   selector: 'app-editarproductos',
@@ -8,44 +9,22 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['./editarproductos.page.scss'],
 })
 export class EditarproductosPage implements OnInit {
-
-
-  item =  {
-
-    id: '1',
-    name: 'Hoodie',
-     price: 40,
-     status: true,
-     cover: 'assets/image/hoodie-blue.webp',
-     description: 'Hoodie corteiz Uk',
-
-
-  }
-
-      
+  productoRecibido: any;
   
-  constructor(private toastController : ToastController, private router: Router) { }
+  constructor(private bd: ServicedbService, private router: Router, private activedroute: ActivatedRoute) {
+    this.activedroute.queryParams.subscribe(res=>{
+      if(this.router.getCurrentNavigation()?.extras.state){
+        this.productoRecibido = this.router.getCurrentNavigation()?.extras?.state?.['productoEnviado'];
+      }
+    })
+   }
 
   ngOnInit() {
   }
 
+  modificar(){
+    this.bd.ModificarProducto(this.productoRecibido.id_producto, this.productoRecibido.nombre,this.productoRecibido.descripcion, this.productoRecibido.precio, this.productoRecibido.stock);
 
-  guardar(){
-
-    this.registroToast('bottom')
     this.router.navigate(['/adminproductos'])
   }
-
-
-  async registroToast(position:'bottom') {
-    const toast = await this.toastController.create({
-      message: 'Producto modificado con exito',
-      icon: 'checkmark-outline',
-      duration: 2500,
-      position: position,
-    });
-
-    await toast.present();
-  }
-
 }

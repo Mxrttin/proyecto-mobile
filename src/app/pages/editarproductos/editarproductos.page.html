@@ -10,26 +10,31 @@
 <ion-content>
 
   <ion-card  >
-    <img alt="Silhouette of mountains" src="{{item.cover}}" />
+    <img alt="Silhouette of mountains" src="{{productoRecibido.foto}}" />
     <ion-card-header class="ion-text-center">
       <ion-item>
         <ion-label position="stacked">Producto</ion-label>
-        <ion-input [(ngModel)]="item.name" ></ion-input>
+        <ion-input [(ngModel)]="productoRecibido.nombre" ></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="stacked">Descripcion</ion-label>
-        <ion-input [(ngModel)]="item.description" ></ion-input>
+        <ion-input [(ngModel)]="productoRecibido.descripcion" ></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Precio</ion-label>
-        <ion-input [(ngModel)]="item.price" type="number" ></ion-input>
+        <ion-input [(ngModel)]="productoRecibido.precio" type="number" ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Stock</ion-label>
+        <ion-input [(ngModel)]="productoRecibido.stock" type="number" ></ion-input>
       </ion-item>
     </ion-card-header>
     
     <ion-card-content>
       <div class="boton">
-        <ion-button color="tertiary" (click)="guardar()">Guardar Cambios</ion-button>
+        <ion-button color="tertiary" (click)="modificar()">Guardar Cambios</ion-button>
       </div>
     </ion-card-content>
     

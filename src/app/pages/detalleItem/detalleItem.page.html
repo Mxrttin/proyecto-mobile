@@ -16,14 +16,14 @@
     </ion-toolbar>
   </ion-header>
 
-  <div [style.backgroundImage]="'url(' + item.cover + ')'" class="bg"></div>
+  <div [style.backgroundImage]="'url(' + productoRecibido.foto + ')'" class="bg"></div>
   <ion-label>
-    <h4>{{item.name | uppercase }}</h4>
-    <p class="desc">{{item.description}}</p>
+    <h4>{{productoRecibido.nombre | uppercase }}</h4>
+    <p class="desc">{{productoRecibido.descripcion}}</p>
     <p>
       <ion-text color="medium"></ion-text>
       <ion-text color="white" class="price">
-        $<span>{{item.price}}</span>
+        $<span>{{productoRecibido.precio}}</span>
       </ion-text>
     </p>
   </ion-label>
