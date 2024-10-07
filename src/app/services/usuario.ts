@@ -1,8 +1,8 @@
 export class Usuario {
 
-    idUsuario!: number;
+    id_user!: number;
     nombre!: string;
-    apellidp!: string;
+    apellido!: string;
     rut!:number;
     correo!:string;
     telefono!:number;
@@ -11,6 +11,11 @@ export class Usuario {
     //------------------------
     foto!:string;
     rol!:number;
+
+    //-------------------------
+    descripcion_direccion!:string;
+    comuna_nombre!:string;
+    region_nombre!:string;
 
 
 }

@@ -12,7 +12,7 @@
 
 
 
-  <ion-list *ngFor="let usuario of usuarios">
+  <ion-list *ngFor="let usuario of arregloUsuarios">
     <ion-item>
       <ion-avatar>
         <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
@@ -20,7 +20,7 @@
       <ion-label>
         {{usuario.nombre}}
       </ion-label>
-      <ion-button slot="end" color="tertiary" [routerLink]="'/infousuario'">Informacion</ion-button>
+      <ion-button slot="end" color="tertiary" (click)="visualizarUsuario(usuario)">Informacion</ion-button>
 
     </ion-item>
   </ion-list>

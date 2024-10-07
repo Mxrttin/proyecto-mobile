@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
+import { ServicedbService } from 'src/app/services/servicedb.service';
 
 @Component({
   selector: 'app-adminusuarios',
@@ -7,40 +9,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminusuariosPage implements OnInit {
 
-  cantidad: number = 1;
-  usuarios = [
+  arregloUsuarios: any = [
 
     {
-      nombre:'Raul'
-    },   
-    {
-      nombre:'Benjamin'
-    },
-    {
-      nombre:'Nicolas'
-    },
-    {
-      nombre:'Martin',
-    },
+      nombre : ''
 
-
+    }
   ]
 
-  constructor() { }
+  constructor(private router: Router, private db: ServicedbService) { }
 
   ngOnInit() {
+    this.db.dbState().subscribe(data=>{
+      if(data){
+        this.db.fetchUsuario().subscribe(res=>{
+          this.arregloUsuarios = res;
+        })
+      }
+    })
   }
 
+  visualizarUsuario(usuario: any){
+    let navigationExtras: NavigationExtras = {
 
-  sumarCantidad() {
-    this.cantidad += 1;
-  }
-
-  restarCantidad() {
-    if (this.cantidad > 1) {
-      this.cantidad -= 1;
+      state:{
+        usuarioEnviado: usuario
+      }
     }
+    this.router.navigate(['/infousuario'],navigationExtras)
   }
+
+
 }
 
 

@@ -23,13 +23,28 @@
             <ion-col>
   
               <ion-item>
-                <ion-label position="stacked">Nombre del Usuario</ion-label>
-                <ion-input [(ngModel)]="usuario.nombre" ></ion-input>
+                <ion-label position="stacked">Nombre</ion-label>
+                <ion-input [(ngModel)]="usuarioRecibido.nombre" ></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked">Apellido</ion-label>
+                <ion-input [(ngModel)]="usuarioRecibido.apellido" ></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked">Rut</ion-label>
+                <ion-input [(ngModel)]="usuarioRecibido.rut" ></ion-input>
               </ion-item>
   
               <ion-item>
                 <ion-label position="stacked">Correo Electrónico</ion-label>
-                <ion-input [(ngModel)]="usuario.correo" ></ion-input>
+                <ion-input [(ngModel)]="usuarioRecibido.correo" ></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="stacked">Telefono</ion-label>
+                <ion-input [(ngModel)]="usuarioRecibido.telefono" ></ion-input>
               </ion-item>
 
             </ion-col>
@@ -49,22 +64,22 @@
             <ion-col>
               <ion-item>
                 <ion-label position="stacked">Comuna</ion-label>
-                <ion-input [(ngModel)]="direccion.comuna" ></ion-input>
+                <ion-input [(ngModel)]="usuarioRecibido.comuna_nombre" ></ion-input>
               </ion-item>
   
               <ion-item>
                 <ion-label position="stacked">Región</ion-label>
-                <ion-input [(ngModel)]="direccion.region" ></ion-input>
+                <ion-input [(ngModel)]="usuarioRecibido.region_nombre" ></ion-input>
               </ion-item>
   
               <ion-item>
                 <ion-label position="stacked">Nombre del Cliente</ion-label>
-                <ion-input [(ngModel)]="direccion.nombreCliente" ></ion-input>
+                <ion-input [(ngModel)]="usuarioRecibido.nombre"></ion-input>
               </ion-item>
   
               <ion-item>
                 <ion-label position="stacked">Dirección de su Domicilio</ion-label>
-                <ion-input [(ngModel)]="direccion.direccion"></ion-input>
+                <ion-input [(ngModel)]="usuarioRecibido.descripcion_direccion"></ion-input>
               </ion-item>
 
             </ion-col>

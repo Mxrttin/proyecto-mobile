@@ -7,6 +7,9 @@ import { Talla } from './talla';
 import { Categoria } from './categoria';
 import { Producto } from './producto';
 import { Usuario } from './usuario';
+import { Region } from './region';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
+import { Comuna } from './comuna';
 
 @Injectable({
   providedIn: 'root'
@@ -86,6 +89,53 @@ export class ServicedbService {
 
   //INSERT TABLA USUARIO
   registroUsuarioaAdmin: string = "INSERT or IGNORE INTO usuario(id_user,nombre,apellido,rut,correo,telefono,clave,foto,rol) VALUES (1,'Martin','Irarrazabal',123456789,'martin@gmail.com',987654321,'12345','',1)";
+  registroUsuarioCliente1: string = "INSERT or IGNORE INTO usuario(id_user,nombre,apellido,rut,correo,telefono,clave,foto,rol) VALUES (2,'Raul','Miranda',123456785,'raul@gmail.com',987654323,'12345','',2)";
+  registroUsuarioCliente2: string = "INSERT or IGNORE INTO usuario(id_user,nombre,apellido,rut,correo,telefono,clave,foto,rol) VALUES (3,'Benjamin','Vega',123456784,'benjamin@gmail.com',987654325,'12345','',2)";
+
+  //INSERT TABLA REGION
+  registroRegion1: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (1,'Arica y Parinacota')";
+  registroRegion2: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (2,'Tarapaca')";
+  registroRegion3: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (3,'Antofagasta')";
+  registroRegion4: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (4,'Atacama')";
+  registroRegion5: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (5,'Coquimbo')";
+  registroRegion6: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (6,'Valparaiso')";
+  registroRegion7: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (7,'Metropolitana de Santiago')";
+  registroRegion8: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (8,'Libertador General Bernardo OHiggins')";
+  registroRegion9: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (9,'Maule')";
+  registroRegion10: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (10,'Ñuble')";
+  registroRegion11: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (11,'Biobio')";
+  registroRegion12: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (12,'La Araucania')";
+  registroRegion13: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (13,'Los Rios')";
+  registroRegion14: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (14,'Los Lagos')";
+  registroRegion15: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (15,'Aysén del General Carlos Ibáñez del Campo')";
+  registroRegion16: string = "INSERT or IGNORE INTO region(id_region,nombre) VALUES (16,'Magallanes y de la Antártica Chilena')";
+
+  //INSERT TABLA COMUNA
+  registroComuna1: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (1,'Arica',1)"
+  registroComuna2: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (2,'Iquique',2)"
+  registroComuna3: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (3,'Calama',3)"
+  registroComuna4: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (4,'Vallenar',4)"
+  registroComuna5: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (5,'La Serena',5)"
+  registroComuna6: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (6,'Concon',6)"
+  registroComuna7: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (7,'Conchali',7)"
+  registroComuna8: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (8,'Pichilemu',8)"
+  registroComuna9: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (9,'Linares',9)"
+  registroComuna10: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (10,'Bulnes',10)"
+  registroComuna11: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (11,'Concepcion',11)"
+  registroComuna12: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (12,'Lumaco',12)"
+  registroComuna13: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (13,'Valdivia',13)"
+  registroComuna14: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (14,'Purranque',14)"
+  registroComuna15: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (15,'Aysen',15)"
+  registroComuna16: string = "INSERT or IGNORE into comuna(id_comuna,nombre,region) VALUES (16,'Torres del paine',16)"
+
+  //INSERT TABLA DIRECCION
+  registroDireccion1: string = "INSERT or IGNORE into direccion(id_direccion,descripcion,comuna,usuario) VALUES (1,'Las Aguilas 0365',7,2)";
+  registroDireccion2: string = "INSERT or IGNORE into direccion(id_direccion,descripcion,comuna,usuario) VALUES (2,'Las Vertientes 285',4,3)";
+
+  //INSERT TABLA ESTADO
+  registroEstadoEnProceso: string = "INSERT or IGNORE into estado(id_estado,nombre) VALUES (1,'En proceso')";
+  registroEstadoEnviado: string = "INSERT or IGNORE into estado(id_estado,nombre) VALUES (2,'Enviado')";
+  registroEstadoFinalizado: string = "INSERT or IGNORE into estado(id_estado,nombre) VALUES (2,'Finalizado')";
 
   //VARAIBLES PARA GUARDAR LOS REGISTROS RESULTANTES DE UN SElECT
   listadoRol = new BehaviorSubject([]);
@@ -97,6 +147,14 @@ export class ServicedbService {
   listadoProducto = new BehaviorSubject([]);
 
   listadoUsuario = new BehaviorSubject([]);
+
+  listadoRegion = new BehaviorSubject([]);
+
+  listadoComuna = new BehaviorSubject([]);
+
+  listadoDireccion = new BehaviorSubject([]);
+
+  listadoEstado = new BehaviorSubject([]);
 
   //VARIABLE PARA MANIPIULAR EL ESTADO DE LA BASE DE DATOS (SOLO UNA)
   private isDBReady : BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -128,6 +186,15 @@ export class ServicedbService {
     return this.listadoUsuario.asObservable();
   }
 
+  fetchRegion(): Observable<Region[]>{
+    return this.listadoRegion.asObservable();
+  }
+
+  fetchComuna(): Observable<Comuna[]>{
+    return this.listadoComuna.asObservable();
+  }
+
+
   //FUNCION PARA VER EL ESTADO DE LA BASE DE DATOS
   dbState(){
     return this.isDBReady.asObservable();
@@ -157,6 +224,9 @@ export class ServicedbService {
         //llamar a la funcion de creacion de tablas
         this.crearTablas();
         this.consultarProducto();
+        this.consultarUsuario();
+        this.consultarRegion();
+        this.consultaComuna();
         //modificar el observable del status de la base de datos
         this.isDBReady.next(true);
       }).catch(e =>{
@@ -215,6 +285,53 @@ export class ServicedbService {
 
       //insert tabla usuario
       await this.database.executeSql(this.registroUsuarioaAdmin,[]);
+      await this.database.executeSql(this.registroUsuarioCliente1,[]);
+      await this.database.executeSql(this.registroUsuarioCliente2,[]);
+
+      //insert tabla region
+      await this.database.executeSql(this.registroRegion1,[]);
+      await this.database.executeSql(this.registroRegion2,[]);
+      await this.database.executeSql(this.registroRegion3,[]);
+      await this.database.executeSql(this.registroRegion4,[]);
+      await this.database.executeSql(this.registroRegion5,[]);
+      await this.database.executeSql(this.registroRegion6,[]);
+      await this.database.executeSql(this.registroRegion7,[]);
+      await this.database.executeSql(this.registroRegion8,[]);
+      await this.database.executeSql(this.registroRegion9,[]);
+      await this.database.executeSql(this.registroRegion10,[]);
+      await this.database.executeSql(this.registroRegion11,[]);
+      await this.database.executeSql(this.registroRegion12,[]);
+      await this.database.executeSql(this.registroRegion13,[]);
+      await this.database.executeSql(this.registroRegion14,[]);
+      await this.database.executeSql(this.registroRegion15,[]);
+      await this.database.executeSql(this.registroRegion16,[]);
+
+      //insert tabla comuna
+      await this.database.executeSql(this.registroComuna1,[]);
+      await this.database.executeSql(this.registroComuna2,[]);
+      await this.database.executeSql(this.registroComuna3,[]);
+      await this.database.executeSql(this.registroComuna4,[]);
+      await this.database.executeSql(this.registroComuna5,[]);
+      await this.database.executeSql(this.registroComuna6,[]);
+      await this.database.executeSql(this.registroComuna7,[]);
+      await this.database.executeSql(this.registroComuna8,[]);
+      await this.database.executeSql(this.registroComuna9,[]);
+      await this.database.executeSql(this.registroComuna10,[]);
+      await this.database.executeSql(this.registroComuna11,[]);
+      await this.database.executeSql(this.registroComuna12,[]);
+      await this.database.executeSql(this.registroComuna13,[]);
+      await this.database.executeSql(this.registroComuna14,[]);
+      await this.database.executeSql(this.registroComuna15,[]);
+      await this.database.executeSql(this.registroComuna16,[]);
+
+      //insert tabla direccion
+      await this.database.executeSql(this.registroDireccion1,[]);
+      await this.database.executeSql(this.registroDireccion2,[]);
+
+      //insert tabla estado
+      await this.database.executeSql(this.registroEstadoEnProceso,[]);
+      await this.database.executeSql(this.registroEstadoEnviado,[]);
+      await this.database.executeSql(this.registroEstadoFinalizado,[]);
 
     }catch(e){
       this.presentAlert("Creacion de tablas","Error creando las tablas: " + JSON.stringify(e));
@@ -263,6 +380,81 @@ export class ServicedbService {
 
     }).catch(e=>{
       this.presentAlert("Visualizar","Error: " + JSON.stringify(e));
+    })
+  }
+
+  //FUNCIONANDO (VISTA DEL ADMIN)
+  consultarUsuario(){
+    return this.database.executeSql('SELECT u.id_user, u.nombre, u.apellido, u.rut, u.correo , u.telefono, d.descripcion AS descripcion_direccion, c.nombre AS comuna_nombre, r.nombre AS region_nombre FROM usuario u JOIN direccion d ON d.usuario = u.id_user JOIN comuna c ON c.id_comuna = d.comuna JOIN region r ON r.id_region = c.region WHERE rol = 2',[]).then(res=>{
+      let users: Usuario[] = [];
+
+      if(res.rows.length > 0){
+
+        for(var i = 0; i < res.rows.length ; i++){
+
+          users.push({
+
+            id_user: res.rows.item(i).id_user,
+            nombre: res.rows.item(i).nombre,
+            apellido: res.rows.item(i).apellido,
+            rut: res.rows.item(i).rut,
+            correo: res.rows.item(i).correo,
+            telefono: res.rows.item(i).telefono,
+            clave: res.rows.item(i).clave,
+            foto: res.rows.item(i).foto,
+            rol: res.rows.item(i).rol,
+            descripcion_direccion: res.rows.item(i).descripcion_direccion,
+            comuna_nombre: res.rows.item(i).comuna_nombre,
+            region_nombre: res.rows.item(i).region_nombre,
+
+          })
+        }
+      }
+      this.listadoUsuario.next(users as any)
+    })
+  }
+
+  visualizarUsuario(){
+    return this.database.executeSql('SELECT * FROM usuario WHERE id_user = ? ',[]).then(res=>{
+
+    }).catch(e=>{
+      this.presentAlert("Visualizar Usuario","Error: " + JSON.stringify(e));
+    })
+  }
+
+  //FUNCIONANDO
+  consultarRegion(){
+    return this.database.executeSql('SELECT * FROM region',[]).then(res=>{
+      let regiones: Region[] = [];
+
+      if(res.rows.length > 0){
+
+        for(var i = 0 ; i<res.rows.length; i++){
+          regiones.push({
+            id_region: res.rows.item(i).id_region,
+            nombre: res.rows.item(i).nombre,
+          })
+        }
+      }
+      this.listadoRegion.next(regiones as any)
+    })
+  }
+
+  consultaComuna(){
+    return this.database.executeSql('SELECT * FROM comuna',[]).then(res=>{
+      let comunas: Comuna[] = [];
+
+      if(res.rows.length > 0){
+
+        for(var i = 0 ; i<res.rows.length; i++){
+          comunas.push({
+            id_comuna: res.rows.item(i).id_comuna,
+            nombre: res.rows.item(i).nombre,
+            region: res.rows.item(i).region,
+          })
+        }
+      }
+      this.listadoComuna.next(comunas as any)
     })
   }
 

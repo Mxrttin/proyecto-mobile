@@ -15,7 +15,16 @@ export class DetalleItemPage implements OnInit {
   productoRecibido: any;
   cantidad : number = 1;
 
-  constructor(private bd: ServicedbService, private router: Router, private activedroute: ActivatedRoute) {
+  arregloRegion: any = [
+    {
+      id_region: '',
+      nombre: '',
+    }
+  ]
+
+  
+
+  constructor(private db: ServicedbService, private router: Router, private activedroute: ActivatedRoute) {
     this.activedroute.queryParams.subscribe(res=>{
       if(this.router.getCurrentNavigation()?.extras.state){
         this.productoRecibido = this.router.getCurrentNavigation()?.extras?.state?.['productoEnviado'];
@@ -23,7 +32,15 @@ export class DetalleItemPage implements OnInit {
     })
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.db.dbState().subscribe(data =>{
+      if(data){
+        this.db.fetchRegion().subscribe(res=>{
+          this.arregloRegion = res;
+        })
+      }
+    })
+  }
 
 
 
