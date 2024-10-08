@@ -22,7 +22,21 @@
     <ion-card-content>
 
       <ion-item>
-        <ion-input label="Nombre" labelPlacement="floating" placeholder=""></ion-input>
+        <ion-input label="Nombre" labelPlacement="floating" placeholder="" [(ngModel)]="nombre"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Descripcion" labelPlacement="floating" placeholder="" [(ngModel)]="descripcion"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Categoria" labelPlacement="floating" placeholder="" type="number" [(ngModel)]="categoria"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <label >Foto</label>
+        <ion-button (click)="takePicture()" >Tomar foto</ion-button>
+        <img *ngIf="imagen" [src]="imagen" alt="Sin imagen" style="height: 250px; width: 250px;"/>
       </ion-item>
 
       <ion-item>
@@ -30,12 +44,11 @@
       </ion-item>
 
       <ion-item>
-        <ion-input label="Descripcion" labelPlacement="floating" placeholder=""></ion-input>
+        <ion-input label="Stock" labelPlacement="floating" placeholder="" type="number" [(ngModel)]="stock"></ion-input>
       </ion-item>
 
       <ion-item>
-        <label >Foto</label>
-        <ion-icon name="images-outline" slot="end"></ion-icon>
+        <ion-input label="Talla" labelPlacement="floating" placeholder="" type="number" [(ngModel)]="talla"></ion-input>
       </ion-item>
 
       <br>

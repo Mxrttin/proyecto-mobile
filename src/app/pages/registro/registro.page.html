@@ -20,10 +20,19 @@
 
     <ion-card-content>
       <ion-item>
-        <ion-input label="Nombre de usuario" labelPlacement="floating" placeholder="Ingrese su nombre de usuario" [(ngModel)]="nombreUsuario" ></ion-input>
+        <ion-input label="Nombre" labelPlacement="floating" placeholder="Ingrese su Nombre" [(ngModel)]="nombre" ></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input label="Correo electronico" labelPlacement="floating" type="email" placeholder="Ingrese su Correo" [(ngModel)]="email"> </ion-input>
+        <ion-input label="Apellido" labelPlacement="floating" placeholder="Ingrese su Apellido" [(ngModel)]="apellido"> </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input label="Rut" labelPlacement="floating" placeholder="Ingrese su Rut" type="number" [(ngModel)]="rut"> </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input label="Correo electronico" labelPlacement="floating" type="email" placeholder="Ingrese su Correo" [(ngModel)]="correo"> </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input label="Telefono" labelPlacement="floating" placeholder="Ingrese su telefono" type="number" [(ngModel)]="telefono"> </ion-input>
       </ion-item>
       <ion-item>
         <ion-input label="Contraseña" labelPlacement="floating" type="password" placeholder="Ingrese su contraseña" [(ngModel)]="password" ></ion-input>

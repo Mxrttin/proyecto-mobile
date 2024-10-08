@@ -40,6 +40,12 @@ export class AdminusuariosPage implements OnInit {
   }
 
 
+  eliminar(usuario:any){
+    this.db.eliminarUsuario(usuario.id_user)
+
+  }
+
+
 }
 
 

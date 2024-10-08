@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
+import { ServicedbService } from 'src/app/services/servicedb.service';
 
 @Component({
   selector: 'app-registro',
@@ -9,34 +10,24 @@ import { AlertController, ToastController } from '@ionic/angular';
 })
 export class RegistroPage implements OnInit {
 
-  nombreUsuario: string = '';
-  email: string = '';
+  nombre: string = '';
+  apellido: string = '';
+  rut!:number;
+  correo: string='';
+  telefono!:number;
   password: string = '';
   confirmarPassword: string = '';
+  rol: number = 2
 
 
-  constructor( private router : Router , private alertController: AlertController , private toastController : ToastController) { }
+  constructor( private router : Router , private alertController: AlertController , private toastController : ToastController, private db : ServicedbService) { }
 
   ngOnInit() {
   }
 
   registro(){
 
-    let navigationextras: NavigationExtras = {
-
-      state:{
-
-        nombreUser: this.nombreUsuario,
-        email: this.email,
-        password: this.password,
-        confirmarPassword: this.confirmarPassword
-
-      }
-
-    }
-
-
-    if(this.nombreUsuario == '' ||  this.email == '' ||  this.password == '' || this.confirmarPassword == ''){
+    if(this.nombre == '' ||  this.apellido == '' ||  this.password == '' || this.confirmarPassword == ''){
       
       this.rellenarAlert()
 
@@ -47,7 +38,8 @@ export class RegistroPage implements OnInit {
     }else{
 
       this.registroToast('bottom')
-      this.router.navigate(['/login'],navigationextras)
+      this.db.insertarUsuario(this.nombre,this.apellido,this.rut,this.correo,this.telefono,this.password,this.rol);
+      this.router.navigate(['/login'])
 
     }
 

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Camera, CameraResultType } from '@capacitor/camera';
+import { ServicedbService } from 'src/app/services/servicedb.service';
 
 @Component({
   selector: 'app-agregarproductos',
@@ -9,9 +11,15 @@ import { AlertController, ToastController } from '@ionic/angular';
 })
 export class AgregarproductosPage implements OnInit {
 
-  precio!: number;
+  imagen: any;
+  precio: any ;
+  nombre: string =''
+  descripcion: string=''
+  categoria:any
+  stock:any
+  talla:any
 
-  constructor(private toastController : ToastController, private router: Router, private alertController: AlertController) { }
+  constructor(private toastController : ToastController, private router: Router, private alertController: AlertController,private db : ServicedbService) { }
 
   ngOnInit() {
   }
@@ -26,6 +34,7 @@ export class AgregarproductosPage implements OnInit {
 
     }else{
       this.registroToast('bottom')
+      this.db.insertarProducto(this.nombre,this.descripcion,this.categoria,this.imagen,this.precio,this.stock,this.talla)
       this.router.navigate(['/adminproductos'])
 
     }
@@ -33,6 +42,25 @@ export class AgregarproductosPage implements OnInit {
   
 
   }
+
+
+  takePicture = async () => {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.Uri
+    });
+  
+    // image.webPath will contain a path that can be set as an image src.
+    // You can access the original file using image.path, which can be
+    // passed to the Filesystem API to read the raw data of the image,
+    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+    this.imagen = image.webPath;
+
+  };
+
+
+
 
   async userAlert() {
     const alert = await this.alertController.create({

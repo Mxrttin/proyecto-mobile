@@ -8,12 +8,12 @@ import { Categoria } from './categoria';
 import { Producto } from './producto';
 import { Usuario } from './usuario';
 import { Region } from './region';
-import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 import { Comuna } from './comuna';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class ServicedbService {
 
   //variable para la conexion a la base de datos
@@ -31,7 +31,7 @@ export class ServicedbService {
   tablaCategoria: string = "CREATE TABLE IF NOT EXISTS categoria(id_categoria INTEGER PRIMARY KEY autoincrement, nombre VARCHAR(50) NOT NULL);";
 
   //TABLA PRODUCTO
-  tablaProducto: string = "CREATE TABLE IF NOT EXISTS producto(id_producto INTEGER PRIMARY KEY autoincrement, nombre VARCHAR(50) NOT NULL, descripcion VARCHAR(100) NOT NULL,categoria INTEGER NOT NULL, foto TEXT NOT NULL, precio INTEGER NOT NULL, stock INTEGER NOT NULL,talla INTEGER NOT NULL, FOREIGN KEY(categoria) REFERENCES categoria(id_categoria), FOREIGN KEY(talla) REFERENCES talla(id_talla));";
+  tablaProducto: string = "CREATE TABLE IF NOT EXISTS producto(id_producto INTEGER PRIMARY KEY autoincrement, nombre VARCHAR(50) NOT NULL, descripcion VARCHAR(100) NOT NULL,categoria INTEGER NOT NULL, foto BLOB, precio INTEGER NOT NULL, stock INTEGER NOT NULL,talla INTEGER NOT NULL, FOREIGN KEY(categoria) REFERENCES categoria(id_categoria), FOREIGN KEY(talla) REFERENCES talla(id_talla));";
 
   //TABLA USUARIO
   tablaUsuario: string = "CREATE TABLE IF NOT EXISTS usuario(id_user INTEGER PRIMARY KEY autoincrement, nombre VARCHAR(50) NOT NULL, apellido VARCHAR(100) NOT NULL, rut TEXT NOT NULL, correo TEXT NOT NULL, telefono TEXT NOT NULL, clave TEXT NOT NULL, foto TEXT, rol INTEGER NOT NULL, FOREIGN KEY(rol) REFERENCES rol(id_rol));";
@@ -76,7 +76,9 @@ export class ServicedbService {
   registroCategoriaCamisa: string = "INSERT OR IGNORE INTO categoria(id_categoria,nombre) VALUES (6, 'Camisa')";
 
   //INSERT TABLA PRODUCTO
-  registroProducto: string = "INSERT or IGNORE INTO producto(id_producto,nombre,descripcion,categoria,foto,precio,stock,talla) VALUES (1, 'Hoodie','Hoodie corteiz Uk',1,'assets/image/hoodie-blue.webp',80,50,3)";
+  blueHoodie: string = 'assets/image/hoodie-blue.webp';
+
+  registroProducto: string = "INSERT or IGNORE INTO producto(id_producto,nombre,descripcion,categoria,foto,precio,stock,talla) VALUES (1, 'Hoodie','Hoodie corteiz Uk',1,'${this.blueHoodie}',80,50,3)";
   registroProducto2: string = "INSERT or IGNORE INTO producto(id_producto,nombre,descripcion,categoria,foto,precio,stock,talla) VALUES (2, 'Falda','falda denin corteiz UK',5,'assets/image/falda-denin.webp',30,50,1)";
   registroProducto3: string = "INSERT or IGNORE INTO producto(id_producto,nombre,descripcion,categoria,foto,precio,stock,talla) VALUES (3, 'Short','short alcatraz',4,'assets/image/short-denin.webp',40,50,1)";
   registroProducto4: string = "INSERT or IGNORE INTO producto(id_producto,nombre,descripcion,categoria,foto,precio,stock,talla) VALUES (4, 'tan top','tan top algodon',2,'assets/image/tan-top-blanca.webp',20,50,1)";
@@ -156,6 +158,7 @@ export class ServicedbService {
 
   listadoEstado = new BehaviorSubject([]);
 
+
   //VARIABLE PARA MANIPIULAR EL ESTADO DE LA BASE DE DATOS (SOLO UNA)
   private isDBReady : BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -227,6 +230,7 @@ export class ServicedbService {
         this.consultarUsuario();
         this.consultarRegion();
         this.consultaComuna();
+        this.consultarSoloUsuario(),
         //modificar el observable del status de la base de datos
         this.isDBReady.next(true);
       }).catch(e =>{
@@ -383,7 +387,47 @@ export class ServicedbService {
     })
   }
 
+  //TERMINADO Y funcionando
+  insertarProducto(nombre:string, descripcion:string, categoria:string, foto:string, precio:string, stock:string,talla:string){
+    return this.database.executeSql('INSERT INTO producto(nombre,descripcion,categoria,foto,precio,stock,talla) VALUES (?,?,?,?,?,?,?)',[nombre,descripcion,categoria,foto,precio,stock,talla]).then(res=>{
+      this.presentAlert("Insertar","Producto insertado")
+      this.consultarProducto();
+    }).catch(e=>{
+      this.presentAlert("Insertar", "Error: " + JSON.stringify(e));
+    })
+  }
+
   //FUNCIONANDO (VISTA DEL ADMIN)
+
+  consultarSoloUsuario(){
+    return this.database.executeSql('SELECT * FROM usuario WHERE rol = 2',[]).then(res=>{
+      let users: Usuario[] = [];
+
+      if(res.rows.length > 0){
+
+        for(var i = 0; i < res.rows.length ; i++){
+
+          users.push({
+
+            id_user: res.rows.item(i).id_user,
+            nombre: res.rows.item(i).nombre,
+            apellido: res.rows.item(i).apellido,
+            rut: res.rows.item(i).rut,
+            correo: res.rows.item(i).correo,
+            telefono: res.rows.item(i).telefono,
+            clave: res.rows.item(i).clave,
+            foto: res.rows.item(i).foto,
+            rol: res.rows.item(i).rol,
+            descripcion_direccion: res.rows.item(i).descripcion_direccion,
+            comuna_nombre: res.rows.item(i).comuna_nombre,
+            region_nombre: res.rows.item(i).region_nombre,
+          })
+        }
+      }
+      this.listadoUsuario.next(users as any)
+    })
+  }
+
   consultarUsuario(){
     return this.database.executeSql('SELECT u.id_user, u.nombre, u.apellido, u.rut, u.correo , u.telefono, d.descripcion AS descripcion_direccion, c.nombre AS comuna_nombre, r.nombre AS region_nombre FROM usuario u JOIN direccion d ON d.usuario = u.id_user JOIN comuna c ON c.id_comuna = d.comuna JOIN region r ON r.id_region = c.region WHERE rol = 2',[]).then(res=>{
       let users: Usuario[] = [];
@@ -419,6 +463,24 @@ export class ServicedbService {
 
     }).catch(e=>{
       this.presentAlert("Visualizar Usuario","Error: " + JSON.stringify(e));
+    })
+  }
+
+  insertarUsuario(nombre:string, apellido:string, rut:number, correo:string, telefono:number,clave:string,rol:number){
+    return this.database.executeSql("INSERT INTO usuario (nombre,apellido,rut,correo,telefono,clave,rol) VALUES (?,?,?,?,?,?,?)",[nombre,apellido,rut,correo,telefono,clave,rol]).then(res=>{
+      this.presentAlert("Insertar","Usuario Insertado");
+      this.consultarSoloUsuario();
+    }).catch(e=>{
+      this.presentAlert("Insertar", "Error: " + JSON.stringify(e));
+    })
+  }
+
+  eliminarUsuario(id:string){
+    return this.database.executeSql('DELETE FROM usuario WHERE id_user = ?',[id]).then(res=>{
+      this.presentAlert("Eliminar","Usuario Eliminado");
+      this.consultarSoloUsuario();
+    }).catch(e=>{
+      this.presentAlert("Eliminar", "Error: " + JSON.stringify(e));
     })
   }
 
